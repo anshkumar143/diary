@@ -3,86 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Secure Shared Diary</title>
+  <title>Our Romantic Diary</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: auto;
-      background-color: #f0f8ff;
+      font-family: 'Segoe UI', sans-serif;
+      background: #ffe6f0;
+      color: #333;
       max-width: 800px;
+      margin: auto;
+      padding: 20px;
     }
     h1, h2 {
       text-align: center;
+      color: #d63384;
     }
-    textarea {
+    #countdown {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #6f42c1;
+    }
+    textarea, input[type="password"] {
       width: 100%;
-      height: 120px;
       padding: 10px;
       font-size: 16px;
-      box-sizing: border-box;
       margin-top: 10px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
     button {
       width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-top: 10px;
-      background-color: #007bff;
+      background-color: #ff4da6;
       color: white;
       border: none;
-      border-radius: 5px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    input[type="password"] {
-      width: 100%;
       padding: 12px;
       font-size: 16px;
+      border-radius: 6px;
       margin-top: 10px;
-      box-sizing: border-box;
+    }
+    button:hover {
+      background-color: #e60073;
     }
     .entry {
+      background: white;
+      padding: 12px;
       border: 1px solid #ccc;
-      padding: 10px;
       margin-top: 15px;
-      background-color: #fff;
-      border-radius: 5px;
+      border-radius: 6px;
     }
     .timestamp {
       font-size: 12px;
       color: #888;
-      margin-bottom: 5px;
     }
     #diarySection {
+      display: none;
+    }
+    #wrongPassword {
+      color: red;
+      text-align: center;
       display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>📓 My Secure Shared Diary</h1>
+  <h1>💖 Our Romantic Diary 💖</h1>
 
-  <!-- Password prompt -->
+  <!-- Countdown Timer -->
+  <div id="countdown">Loading countdown...</div>
+
+  <!-- Password Section -->
   <div id="passwordSection">
-    <p>Please enter the diary password:</p>
+    <p>Please enter the secret password to unlock our love diary:</p>
     <input type="password" id="passwordInput" placeholder="Enter password">
     <button onclick="checkPassword()">Unlock Diary</button>
-    <p id="wrongPassword" style="color:red; display:none;">Incorrect password. Try again.</p>
+    <p id="wrongPassword">Incorrect password. Try again.</p>
   </div>
 
   <!-- Diary Section -->
   <div id="diarySection">
-    <textarea id="entryText" placeholder="Write your thoughts here..."></textarea>
+    <textarea id="entryText" placeholder="Write a love note, a memory, or anything you feel..."></textarea>
     <button onclick="saveEntry()">Save Entry</button>
 
-    <h2>🗂️ Previous Entries</h2>
+    <h2>💌 Memories & Love Notes</h2>
     <div id="entriesContainer"></div>
   </div>
 
   <script>
-    // Your secure password
     const DIARY_PASSWORD = "nidhiansh";
 
     function checkPassword() {
@@ -99,7 +107,7 @@
     function saveEntry() {
       const text = document.getElementById("entryText").value.trim();
       if (!text) {
-        alert("Please write something first!");
+        alert("Please write something sweet first!");
         return;
       }
 
@@ -108,9 +116,9 @@
         timestamp: new Date().toLocaleString()
       };
 
-      let entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+      let entries = JSON.parse(localStorage.getItem("romanticDiaryEntries")) || [];
       entries.unshift(entry);
-      localStorage.setItem("diaryEntries", JSON.stringify(entries));
+      localStorage.setItem("romanticDiaryEntries", JSON.stringify(entries));
 
       document.getElementById("entryText").value = "";
       displayEntries();
@@ -120,7 +128,7 @@
       const entriesContainer = document.getElementById("entriesContainer");
       entriesContainer.innerHTML = "";
 
-      const entries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+      const entries = JSON.parse(localStorage.getItem("romanticDiaryEntries")) || [];
 
       entries.forEach(entry => {
         const div = document.createElement("div");
@@ -129,6 +137,29 @@
         entriesContainer.appendChild(div);
       });
     }
+
+    // Countdown Timer
+    const targetDate = new Date("2025-05-12T00:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.getElementById("countdown").innerHTML = "💞 The day has arrived! 💞";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML = 
+        `⏳ ${days} days, ${hours} hrs, ${minutes} min, ${seconds} sec until 12 May 2025 💐`;
+    }
+
+    setInterval(updateCountdown, 1000);
   </script>
 
 </body>
